@@ -16,6 +16,7 @@ dependencies = [
     "numpy>=2.4.6",
     "pandas>=3.0.6",
     "pydantic>=2.13.5",
+    "requests>=2.34.2",
     "scikit-learn>=1.9.1",
     "scipy>=1.17.1",
     "seaborn>=0.13.2",
