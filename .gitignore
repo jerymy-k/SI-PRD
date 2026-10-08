@@ -220,3 +220,7 @@ __marimo__/
 # MLflow local store
 mlflow.db
 mlartifacts/
+
+# Temporary extracted files
+files.zip
+files/
