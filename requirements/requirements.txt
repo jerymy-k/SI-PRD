@@ -1,4 +1,0 @@
-# Dépendances de l'application (versions identiques à l'environnement de développement, Python 3.11)
--r requirements/api.txt
--r requirements/streamlit.txt
--r requirements/mlflow.txt

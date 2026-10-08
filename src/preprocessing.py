@@ -7,8 +7,12 @@ from sklearn.preprocessing import StandardScaler
 NAN_COLUMNS = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
 
 def load_data(filepath):
-    """Loads the raw dataset."""
-    return pd.read_csv(filepath)
+    """Loads the raw dataset, without the leftover CSV index column."""
+    df = pd.read_csv(filepath)
+    # "Unnamed: 0" is the row index saved by the CSV export, not a clinical variable
+    if "Unnamed: 0" in df.columns:
+        df = df.drop(columns=["Unnamed: 0"])
+    return df
 
 def clean_data(df):
     """Replaces physiological zeros with NaN and imputes them using KNN."""

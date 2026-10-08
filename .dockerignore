@@ -7,3 +7,6 @@ mlflow.db
 mlflow-data
 __pycache__
 *.pyc
+.venv-airflow
+files
+files.zip
