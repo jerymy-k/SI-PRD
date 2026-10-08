@@ -29,5 +29,5 @@ def assign_risk_categories(df, labels):
         lambda x: 'risque élevé' if x in high_risk_clusters else 'risque faible'
     )
     
-    return df_out
+    return df_out, high_risk_clusters
 

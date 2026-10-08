@@ -3,6 +3,9 @@ import numpy as np
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler
 
+# Columns where 0 means "missing value" (used for cleaning and saved in the bundle)
+NAN_COLUMNS = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
+
 def load_data(filepath):
     """Loads the raw dataset."""
     return pd.read_csv(filepath)
@@ -10,7 +13,7 @@ def load_data(filepath):
 def clean_data(df):
     """Replaces physiological zeros with NaN and imputes them using KNN."""
     df_clean = df.copy()
-    nan_columns = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
+    nan_columns = NAN_COLUMNS
     
     # Replace 0s with NaN for clinical columns
     df_clean[nan_columns] = df_clean[nan_columns].replace(0, np.nan)

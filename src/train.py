@@ -5,7 +5,7 @@ import warnings
 # Suppress sklearn warnings about feature names inside pipelines if desired
 warnings.filterwarnings("ignore", message="X does not have valid feature names")
 
-from src.preprocessing import load_data, clean_data, scale_data
+from src.preprocessing import load_data, clean_data, scale_data, NAN_COLUMNS
 from src.clustering import train_kmeans, assign_risk_categories
 from src.classification import prepare_splits, apply_smote, train_baseline_models, tune_random_forest
 from src.pipeline import build_inference_pipelines, save_bundle
@@ -38,7 +38,7 @@ def main():
     
     print("2. Clustering (K-Means)...")
     kmeans, labels, silhouette = train_kmeans(df_scaled, n_clusters=2)
-    df_clustered = assign_risk_categories(df_imputed, labels)
+    df_clustered, high_risk_clusters = assign_risk_categories(df_imputed, labels)
     df_clustered.to_csv(PROCESSED_DATA_PATH / "data_clustered.csv", index=False)
     
     # Log Clustering
@@ -98,7 +98,12 @@ def main():
     
     print("7. Assembling Pipelines and Saving Bundle...")
     os.makedirs(MODELS_PATH, exist_ok=True)
-    pipelines = build_inference_pipelines(imputer, scaler, best_rf, kmeans)
+    pipelines = build_inference_pipelines(
+        imputer, scaler, best_rf, kmeans,
+        features=list(X_train.columns),
+        zero_as_missing=NAN_COLUMNS,
+        high_risk_clusters=high_risk_clusters,
+    )
     save_bundle(pipelines, MODELS_PATH / "bundle.joblib")
     
     print("Pipeline execution complete!")
