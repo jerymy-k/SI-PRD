@@ -6,6 +6,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+# Hyperparameters explored by the grid search (also logged to MLflow)
+RF_PARAM_GRID = {
+    'rf__n_estimators': [100, 200, 350],
+    'rf__max_depth': [None, 10, 20],
+    'rf__min_samples_split': [2, 5],
+    'rf__min_samples_leaf': [1, 2]
+}
+
 def prepare_splits(df, target_col='risk_category', test_size=0.2, random_state=42):
     """Splits the dataframe into X (features) and y (target), dropping Cluster."""
     X = df.drop(columns=[target_col, 'Cluster'])
@@ -42,12 +50,7 @@ def tune_random_forest(X_train, y_train, random_state=42):
         ('rf', RandomForestClassifier(random_state=random_state))
     ])
     
-    param_grid = {
-        'rf__n_estimators': [100, 200, 350],
-        'rf__max_depth': [None, 10, 20],
-        'rf__min_samples_split': [2, 5],
-        'rf__min_samples_leaf': [1, 2]
-    }
+    param_grid = RF_PARAM_GRID
     
     scorer = make_scorer(f1_score, pos_label='risque élevé')
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=random_state)

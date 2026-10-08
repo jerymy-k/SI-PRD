@@ -14,8 +14,13 @@ services:
       dockerfile: docker/Dockerfile.api
     ports:
       - "8000:8000"
+    environment:
+      # L'API charge les pipelines "production" depuis le Model Registry
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - mlflow
     volumes:
-      # Le dossier models/ est monté : un modèle réentraîné est visible sans reconstruire l'image
+      # Secours : bundle local utilisé tant qu'aucun modèle n'est en production dans MLflow
       - ./models:/code/models:ro
 
   streamlit:
